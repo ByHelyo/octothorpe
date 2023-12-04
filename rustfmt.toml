@@ -1,0 +1,13 @@
+edition = "2021"
+
+########## Imports ##########
+
+group_imports = "StdExternalCrate"
+imports_granularity = "Crate"
+
+########## General ##########
+
+max_width = 80
+format_strings = true
+comment_width = 80
+wrap_comments = true
