@@ -1,4 +1,7 @@
 mod api;
+mod auth;
+mod rest_error;
+mod slack;
 
 pub fn add(left: usize, right: usize) -> usize {
     left + right

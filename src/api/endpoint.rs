@@ -3,7 +3,10 @@ use std::borrow::Cow;
 use http::Method;
 use serde::de::DeserializeOwned;
 
-use super::{body_error::BodyError, client::Client, query_params::QueryParams, api_error::ApiError, query::Query};
+use super::{
+    api_error::ApiError, body_error::BodyError, client::Client, query::Query,
+    query_params::QueryParams,
+};
 
 trait Endpoint {
     fn method(&self) -> Method;
