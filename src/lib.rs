@@ -1,4 +1,4 @@
-mod api;
+mod core;
 mod auth;
 mod rest_error;
 mod slack;
