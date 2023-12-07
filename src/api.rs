@@ -4,3 +4,5 @@ mod client;
 mod endpoint;
 mod query;
 mod query_params;
+
+pub use self::{api_error::ApiError, client::Client};
