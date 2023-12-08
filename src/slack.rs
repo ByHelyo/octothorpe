@@ -1,7 +1,13 @@
+use bytes::Bytes;
+use http::{request::Builder, Response};
 use reqwest::blocking;
 use url::Url;
 
-use crate::{auth::Auth, core::Client, rest_error::RestError};
+use crate::{
+    auth::Auth,
+    core::{ApiError, Client},
+    rest_error::RestError,
+};
 
 struct Slack {
     client: blocking::Client,
@@ -33,17 +39,30 @@ impl Client for Slack {
     fn rest_endpoint(
         &self,
         endpoint: &str,
-    ) -> Result<Url, crate::core::ApiError<Self::Error>> {
+    ) -> Result<Url, ApiError<Self::Error>> {
         Ok(self.base_url.join(endpoint)?)
     }
 
     fn rest(
         &self,
-        request: http::request::Builder,
+        mut request: Builder,
         body: Vec<u8>,
-    ) -> Result<http::Response<bytes::Bytes>, crate::core::ApiError<Self::Error>>
-    {
-        let call = || -> Result<_, RestError> { todo!() };
+    ) -> Result<Response<Bytes>, ApiError<Self::Error>> {
+        let call = || -> Result<_, RestError> {
+            self.auth.set_header(request.headers_mut().unwrap())?;
+            let http_req = request.body(body)?;
+            let request = http_req.try_into()?;
+            let rsp = self.client.execute(request)?;
+
+            let mut http_rsp = Response::builder()
+                .status(rsp.status())
+                .version(rsp.version());
+            let headers = http_rsp.headers_mut().unwrap();
+            for (key, val) in rsp.headers() {
+                headers.insert(key, val.clone());
+            }
+            Ok(http_rsp.body(rsp.bytes()?)?)
+        };
         Ok(call()?)
     }
 }
