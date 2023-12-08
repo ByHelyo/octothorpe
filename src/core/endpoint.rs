@@ -11,7 +11,7 @@ use super::{
     query_params::QueryParams,
 };
 
-trait Endpoint {
+pub trait Endpoint {
     fn method(&self) -> Method;
 
     fn endpoint(&self) -> Cow<'static, str>;

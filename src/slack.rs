@@ -9,7 +9,7 @@ use crate::{
     rest_error::RestError,
 };
 
-struct Slack {
+pub struct Slack {
     client: blocking::Client,
     base_url: Url,
     auth: Auth,
