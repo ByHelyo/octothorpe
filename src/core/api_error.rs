@@ -12,6 +12,13 @@ where
         source: serde_json::Error,
         typename: &'static str,
     },
+    SlackService {
+        status: http::StatusCode,
+        data: Vec<u8>,
+    },
+    Slack {
+        source: serde_json::Value,
+    },
 }
 
 impl<E> ApiError<E>
@@ -22,6 +29,25 @@ where
         Self::DataType {
             source,
             typename: any::type_name::<T>(),
+        }
+    }
+
+    pub(crate) fn from_slack(val: serde_json::Value) -> Self {
+        Self::Slack { source: val }
+    }
+}
+
+impl<E> ApiError<E>
+where
+    E: Error + Send + Sync + 'static,
+{
+    pub(crate) fn server_error(
+        status: http::StatusCode,
+        bytes: &bytes::Bytes,
+    ) -> Self {
+        Self::SlackService {
+            status: status,
+            data: bytes.into_iter().copied().collect(),
         }
     }
 }
@@ -37,6 +63,12 @@ where
                 "could not parse {} data from json: {}",
                 typename, source
             ),
+            Self::SlackService { status, .. } => {
+                write!(f, "slack internal server error: {}", status)
+            }
+            Self::Slack { source } => {
+                write!(f, "slack server error: {:?}", source)
+            }
             Self::Test { .. } => write!(f, "remove"),
         }
     }

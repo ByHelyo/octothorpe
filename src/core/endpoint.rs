@@ -52,11 +52,11 @@ where
         let val = if let Ok(val) = serde_json::from_slice(rsp.body()) {
             val
         } else {
-            panic!("TODO");
+            return Err(ApiError::server_error(status, rsp.body()));
         };
 
         if !status.is_success() {
-            panic!("TODO");
+            return Err(ApiError::from_slack(val));
         }
 
         serde_json::from_value::<T>(val).map_err(ApiError::data_type::<T>)

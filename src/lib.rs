@@ -1,5 +1,5 @@
-mod core;
 mod auth;
+mod core;
 mod rest_error;
 mod slack;
 

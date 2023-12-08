@@ -1,5 +1,5 @@
 use crate::{
-    api::{ApiError, Client},
+    core::{ApiError, Client},
     rest_error::RestError,
 };
 
