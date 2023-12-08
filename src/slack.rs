@@ -1,7 +1,7 @@
 use reqwest::blocking;
 use url::Url;
 
-use crate::auth::Auth;
+use crate::{auth::Auth, core::Client, rest_error::RestError};
 
 struct Slack {
     client: blocking::Client,
@@ -24,6 +24,27 @@ impl Slack {
             base_url,
             auth,
         }
+    }
+}
+
+impl Client for Slack {
+    type Error = RestError;
+
+    fn rest_endpoint(
+        &self,
+        endpoint: &str,
+    ) -> Result<Url, crate::core::ApiError<Self::Error>> {
+        Ok(self.base_url.join(endpoint)?)
+    }
+
+    fn rest(
+        &self,
+        request: http::request::Builder,
+        body: Vec<u8>,
+    ) -> Result<http::Response<bytes::Bytes>, crate::core::ApiError<Self::Error>>
+    {
+        let call = || -> Result<_, RestError> { todo!() };
+        Ok(call()?)
     }
 }
 
