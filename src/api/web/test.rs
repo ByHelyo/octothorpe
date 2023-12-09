@@ -1,30 +1,29 @@
+use std::borrow::Cow;
+
+use derive_builder::Builder;
 use http::Method;
 
-use crate::core::Endpoint;
+use crate::core::{Endpoint, QueryParams};
 
-pub struct Test {}
+#[derive(Builder)]
+#[builder(setter(strip_option))]
+pub struct Test<'a> {
+    #[builder(setter(into))]
+    error: Option<Cow<'a, str>>,
+}
 
-impl Test {
-    pub fn builder() -> TestBuilder {
+impl<'a> Test<'a> {
+    pub fn builder() -> TestBuilder<'a> {
         TestBuilder::default()
     }
 }
 
-impl Endpoint for Test {
+impl<'a> Endpoint for Test<'a> {
     fn method(&self) -> http::Method {
-        Method::GET
+        Method::POST
     }
 
     fn endpoint(&self) -> std::borrow::Cow<'static, str> {
-        "api.test".to_string().into()
-    }
-}
-
-#[derive(Default)]
-pub struct TestBuilder {}
-
-impl TestBuilder {
-    pub fn build(self) -> Test {
-        Test {}
+        "api.test".into()
     }
 }

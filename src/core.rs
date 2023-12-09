@@ -7,4 +7,5 @@ mod query_params;
 
 pub use self::{
     api_error::ApiError, client::Client, endpoint::Endpoint, query::Query,
+    query_params::QueryParams,
 };

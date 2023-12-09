@@ -16,7 +16,7 @@ impl Endpoint for Conversationslist {
     }
 
     fn endpoint(&self) -> std::borrow::Cow<'static, str> {
-        "conversations.list".to_string().into()
+        "conversations.list".into()
     }
 }
 
