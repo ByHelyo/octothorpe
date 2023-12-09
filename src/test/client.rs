@@ -1,13 +1,18 @@
+use http::{request::Builder, Response};
+use url::Url;
+
 use crate::{
     core::{ApiError, Client},
     rest_error::RestError,
 };
 
-pub struct MockClient {}
+pub struct MockClient {
+    body: Vec<u8>,
+}
 
 impl MockClient {
-    pub fn new() -> Self {
-        MockClient {}
+    pub fn new_raw(body: Vec<u8>) -> Self {
+        MockClient { body }
     }
 }
 
@@ -17,15 +22,16 @@ impl Client for MockClient {
     fn rest_endpoint(
         &self,
         endpoint: &str,
-    ) -> Result<url::Url, ApiError<Self::Error>> {
+    ) -> Result<Url, ApiError<Self::Error>> {
         todo!()
     }
 
     fn rest(
         &self,
-        request: http::request::Builder,
-        body: Vec<u8>,
-    ) -> Result<http::Response<bytes::Bytes>, ApiError<Self::Error>> {
-        todo!()
+        _request: Builder,
+        _body: Vec<u8>,
+    ) -> Result<Response<bytes::Bytes>, ApiError<Self::Error>> {
+        let rsp = Response::builder().body(self.body.into()).unwrap();
+        Ok(rsp)
     }
 }

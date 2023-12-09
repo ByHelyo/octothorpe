@@ -3,7 +3,7 @@ use std::borrow::Cow;
 use derive_builder::Builder;
 use http::Method;
 
-use crate::core::{Endpoint, QueryParams};
+use crate::core::Endpoint;
 
 #[derive(Builder)]
 #[builder(setter(strip_option))]
@@ -19,11 +19,11 @@ impl<'a> Test<'a> {
 }
 
 impl<'a> Endpoint for Test<'a> {
-    fn method(&self) -> http::Method {
+    fn method(&self) -> Method {
         Method::POST
     }
 
-    fn endpoint(&self) -> std::borrow::Cow<'static, str> {
+    fn endpoint(&self) -> Cow<'static, str> {
         "api.test".into()
     }
 }

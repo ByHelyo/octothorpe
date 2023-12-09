@@ -39,8 +39,6 @@ where
             .method(self.method())
             .uri(query::url_to_http_uri(url));
         let (req, data) = if let Some((mime, data)) = self.body().unwrap() {
-            // TODO !
-            // TODO !
             let req = req.header(header::CONTENT_TYPE, mime);
             (req, data)
         } else {

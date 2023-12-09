@@ -1,5 +1,12 @@
-use std::{any, error::Error, fmt::Display};
+use std::{
+    any,
+    error::Error,
+    fmt::{self, Display, Formatter},
+};
 
+use bytes::Bytes;
+use http::StatusCode;
+use serde_json::Value;
 use url::ParseError;
 
 use crate::rest_error::RestError;
@@ -20,11 +27,11 @@ where
         typename: &'static str,
     },
     SlackService {
-        status: http::StatusCode,
+        status: StatusCode,
         data: Vec<u8>,
     },
     Slack {
-        source: serde_json::Value,
+        source: Value,
     },
 }
 
@@ -39,14 +46,11 @@ where
         }
     }
 
-    pub(crate) fn from_slack(val: serde_json::Value) -> Self {
+    pub(crate) fn from_slack(val: Value) -> Self {
         Self::Slack { source: val }
     }
 
-    pub(crate) fn server_error(
-        status: http::StatusCode,
-        bytes: &bytes::Bytes,
-    ) -> Self {
+    pub(crate) fn server_error(status: StatusCode, bytes: &Bytes) -> Self {
         Self::SlackService {
             status: status,
             data: bytes.into_iter().copied().collect(),
@@ -58,7 +62,7 @@ impl<E> Display for ApiError<E>
 where
     E: Error + Send + Sync + 'static,
 {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
             Self::Client { source } => write!(f, "client error: {}", source),
             Self::DataType { source, typename } => write!(

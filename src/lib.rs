@@ -8,4 +8,4 @@ mod slack;
 #[cfg(test)]
 mod test;
 
-pub use slack::Slack;
+pub use self::slack::Slack;

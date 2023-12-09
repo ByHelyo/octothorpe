@@ -69,14 +69,33 @@ impl Client for Slack {
 
 #[cfg(test)]
 mod tests {
+    use http::{Request, Uri};
+
     use super::*;
 
     #[test]
-    fn simple_slack_client() {
+    fn valid_rest_endpoint() {
         let client = Slack::new("mytoken");
+        let url = client.rest_endpoint("api.test");
         assert_eq!(
-            client.base_url,
-            Url::parse("https://slack.com/api/").unwrap()
+            url.unwrap(),
+            Url::parse("https://slack.com/api/api.test").unwrap()
         );
+    }
+
+    #[test]
+    fn invalid_rest_endpoint() {
+        let client = Slack::new("mytoken");
+        let url = client.rest_endpoint("//");
+        assert!(matches!(url, Err(ApiError::UrlParse { .. })));
+    }
+
+    #[test]
+    fn valid_rest() {
+        let client = Slack::new("mytoken");
+        let uri = "https://slack.com/api/api.test".parse::<Uri>().unwrap();
+        let req = Request::builder().uri(uri);
+
+        let rsp = client.rest(req, Vec::new());
     }
 }

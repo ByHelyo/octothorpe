@@ -1,3 +1,5 @@
+use std::borrow::Cow;
+
 use http::Method;
 
 use crate::core::Endpoint;
@@ -11,11 +13,11 @@ impl Conversationslist {
 }
 
 impl Endpoint for Conversationslist {
-    fn method(&self) -> http::Method {
+    fn method(&self) -> Method {
         Method::GET
     }
 
-    fn endpoint(&self) -> std::borrow::Cow<'static, str> {
+    fn endpoint(&self) -> Cow<'static, str> {
         "conversations.list".into()
     }
 }

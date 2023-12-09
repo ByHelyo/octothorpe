@@ -22,3 +22,18 @@ impl Auth {
         Ok(headers)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::auth_error::AuthError;
+
+    #[test]
+    fn invalid_header() {
+        let auth = Auth::Token("\n".to_string());
+        let mut headers = HeaderMap::new();
+        let headers = auth.set_header(&mut headers);
+
+        assert!(matches!(headers, Err(AuthError::HeaderValue { .. })));
+    }
+}
