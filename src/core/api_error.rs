@@ -52,7 +52,7 @@ where
 
     pub(crate) fn server_error(status: StatusCode, bytes: &Bytes) -> Self {
         Self::SlackService {
-            status: status,
+            status,
             data: bytes.into_iter().copied().collect(),
         }
     }

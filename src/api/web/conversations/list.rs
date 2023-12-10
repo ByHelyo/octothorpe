@@ -1,9 +1,12 @@
 use std::borrow::Cow;
 
+use derive_builder::Builder;
 use http::Method;
 
 use crate::core::Endpoint;
 
+#[derive(Builder)]
+#[builder(setter(strip_option))]
 pub struct Conversationslist {}
 
 impl Conversationslist {
@@ -19,14 +22,5 @@ impl Endpoint for Conversationslist {
 
     fn endpoint(&self) -> Cow<'static, str> {
         "conversations.list".into()
-    }
-}
-
-#[derive(Default)]
-pub struct ConversationslistBuilder {}
-
-impl ConversationslistBuilder {
-    pub fn build(self) -> Conversationslist {
-        Conversationslist {}
     }
 }

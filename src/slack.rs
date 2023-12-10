@@ -89,13 +89,4 @@ mod tests {
         let url = client.rest_endpoint("//");
         assert!(matches!(url, Err(ApiError::UrlParse { .. })));
     }
-
-    #[test]
-    fn valid_rest() {
-        let client = Slack::new("mytoken");
-        let uri = "https://slack.com/api/api.test".parse::<Uri>().unwrap();
-        let req = Request::builder().uri(uri);
-
-        let rsp = client.rest(req, Vec::new());
-    }
 }

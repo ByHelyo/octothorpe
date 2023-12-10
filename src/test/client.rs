@@ -31,7 +31,7 @@ impl Client for MockClient {
         _request: Builder,
         _body: Vec<u8>,
     ) -> Result<Response<bytes::Bytes>, ApiError<Self::Error>> {
-        let rsp = Response::builder().body(self.body.into()).unwrap();
+        let rsp = Response::builder().body(self.body.clone().into()).unwrap();
         Ok(rsp)
     }
 }

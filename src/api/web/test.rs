@@ -3,7 +3,7 @@ use std::borrow::Cow;
 use derive_builder::Builder;
 use http::Method;
 
-use crate::core::Endpoint;
+use crate::core::{Endpoint, QueryParams};
 
 #[derive(Builder)]
 #[builder(setter(strip_option))]
@@ -25,5 +25,14 @@ impl<'a> Endpoint for Test<'a> {
 
     fn endpoint(&self) -> Cow<'static, str> {
         "api.test".into()
+    }
+
+    fn parameters(&self) -> crate::core::QueryParams {
+        let mut params = QueryParams::default();
+
+        params
+            .push_opt("error", self.error.as_ref());
+
+        params
     }
 }

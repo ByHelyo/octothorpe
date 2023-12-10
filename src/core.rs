@@ -2,6 +2,7 @@ mod api_error;
 mod body_error;
 mod client;
 mod endpoint;
+mod param_value;
 mod query;
 mod query_params;
 
