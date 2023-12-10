@@ -69,8 +69,6 @@ impl Client for Slack {
 
 #[cfg(test)]
 mod tests {
-    use http::{Request, Uri};
-
     use super::*;
 
     #[test]
@@ -86,7 +84,7 @@ mod tests {
     #[test]
     fn invalid_rest_endpoint() {
         let client = Slack::new("mytoken");
-        let url = client.rest_endpoint("//");
-        assert!(matches!(url, Err(ApiError::UrlParse { .. })));
+        let url = client.rest_endpoint("//").unwrap_err();
+        assert!(matches!(url, ApiError::UrlParse { .. }));
     }
 }
