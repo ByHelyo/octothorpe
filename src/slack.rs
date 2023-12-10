@@ -85,6 +85,9 @@ mod tests {
     fn invalid_rest_endpoint() {
         let client = Slack::new("mytoken");
         let url = client.rest_endpoint("//").unwrap_err();
+
+        dbg!(&url);
+        print!("{}", url);
         assert!(matches!(url, ApiError::UrlParse { .. }));
     }
 }

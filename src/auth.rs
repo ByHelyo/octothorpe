@@ -35,6 +35,8 @@ mod tests {
         let mut headers = HeaderMap::new();
         let headers = auth.set_header(&mut headers).unwrap_err();
 
+        dbg!(&headers);
+        print!("{}", headers);
         assert!(matches!(headers, AuthError::HeaderValue { .. }));
     }
 
