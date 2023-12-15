@@ -30,8 +30,7 @@ impl<'a> Endpoint for Test<'a> {
     fn parameters(&self) -> crate::core::QueryParams {
         let mut params = QueryParams::default();
 
-        params
-            .push_opt("error", self.error.as_ref());
+        params.push_opt("error", self.error.as_ref());
 
         params
     }
@@ -40,6 +39,11 @@ impl<'a> Endpoint for Test<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::{
+        core,
+        core::Query,
+        test::{MockClient, TestClient},
+    };
 
     #[test]
     fn no_parameter() {
@@ -49,5 +53,19 @@ mod tests {
     #[test]
     fn error_is_optionnal() {
         Test::builder().error("my error").build().unwrap();
+    }
+
+    #[test]
+    fn error_endpoint() {
+        let endpoint = MockClient::builder()
+            .method(Method::POST)
+            .endpoint("api.test")
+            .add_query_params(&[("error", "myerror")])
+            .build()
+            .unwrap();
+        let client = TestClient::new_raw(endpoint, "{}");
+
+        let endpoint = Test::builder().error("myerror").build().unwrap();
+        core::ignore(endpoint).query(&client).unwrap();
     }
 }

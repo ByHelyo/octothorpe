@@ -46,6 +46,9 @@ mod tests {
         let mut headers = HeaderMap::new();
         let headers = auth.set_header(&mut headers).unwrap();
 
-        assert_eq!(headers.get(header::AUTHORIZATION).unwrap(), "Bearer mytoken");
+        assert_eq!(
+            headers.get(header::AUTHORIZATION).unwrap(),
+            "Bearer mytoken"
+        );
     }
 }

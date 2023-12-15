@@ -1,11 +1,11 @@
 use std::borrow::Cow;
 
-use http::{header, Method, Request};
+use http::{Method, Request};
 use serde::de::DeserializeOwned;
+use serde_json::Value;
 
 use super::{
     api_error::ApiError,
-    body_error::BodyError,
     client::Client,
     query::{self, Query},
     query_params::QueryParams,
@@ -18,10 +18,6 @@ pub trait Endpoint {
 
     fn parameters(&self) -> QueryParams {
         QueryParams::default()
-    }
-
-    fn body(&self) -> Result<Option<(&'static str, Vec<u8>)>, BodyError> {
-        Ok(None)
     }
 }
 
@@ -38,22 +34,16 @@ where
         let req = Request::builder()
             .method(self.method())
             .uri(query::url_to_http_uri(url));
-        let (req, data) = if let Some((mime, data)) = self.body().unwrap() {
-            let req = req.header(header::CONTENT_TYPE, mime);
-            (req, data)
-        } else {
-            (req, Vec::new())
-        };
 
-        let rsp = client.rest(req, data)?;
+        let rsp = client.rest(req)?;
         let status = rsp.status();
-        let val = if let Ok(val) = serde_json::from_slice(rsp.body()) {
+        let val = if let Ok(val) = serde_json::from_slice::<Value>(rsp.body()) {
             val
         } else {
             return Err(ApiError::server_error(status, rsp.body()));
         };
 
-        if !status.is_success() {
+        if val.get("error").is_some() {
             return Err(ApiError::from_slack(val));
         }
 

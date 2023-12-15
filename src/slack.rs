@@ -46,11 +46,10 @@ impl Client for Slack {
     fn rest(
         &self,
         mut request: Builder,
-        body: Vec<u8>,
     ) -> Result<Response<Bytes>, ApiError<Self::Error>> {
         let call = || -> Result<_, RestError> {
             self.auth.set_header(request.headers_mut().unwrap())?;
-            let http_req = request.body(body)?;
+            let http_req = request.body(Vec::new())?;
             let request = http_req.try_into()?;
             let rsp = self.client.execute(request)?;
 

@@ -17,6 +17,5 @@ pub trait Client {
     fn rest(
         &self,
         request: Builder,
-        body: Vec<u8>,
     ) -> Result<Response<Bytes>, ApiError<Self::Error>>;
 }

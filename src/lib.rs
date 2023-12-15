@@ -6,3 +6,6 @@ mod rest_error;
 mod slack;
 
 pub use self::slack::Slack;
+
+#[cfg(test)]
+mod test;
