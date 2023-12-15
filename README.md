@@ -1,4 +1,6 @@
 # octothorpe
+![example workflow](https://github.com/ByHelyo/octothorpe/actions/workflows/ci.yml/badge.svg)
+[![codecov](https://codecov.io/gh/ByHelyo/octothorpe/graph/badge.svg?token=FMGO7ZV430)](https://codecov.io/gh/ByHelyo/octothorpe)
 
 # Design
 
