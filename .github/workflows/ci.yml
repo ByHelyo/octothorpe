@@ -4,7 +4,6 @@ name: CI
 
 jobs:
   check:
-    name: Check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -17,6 +16,8 @@ jobs:
         run: cargo clippy
 
   code-coverage:
+    runs-on: ubuntu-latest
+    steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install Rust
